@@ -1,12 +1,10 @@
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json"
 
-// Promise Pending
-const dataPromise = d3.json(url);
-console.log("Data Promise: ", dataPromise);
-
-
 d3.json(url).then(function(data){
     console.log(data);
+
+    //initializeBar(data);
+    getData(data);
 });
 
 let ids = Object.values(data.names)
@@ -44,8 +42,10 @@ function getData(){
     let plot_data = [];
 
     if(names.includes(dataset)){
-      //plot_data = 
+      //plot_data = data for each ID
     }
+
+    updatePlotly(data);
 
 }
 let trace1 = {
