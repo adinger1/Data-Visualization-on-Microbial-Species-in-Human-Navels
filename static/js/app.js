@@ -1,18 +1,12 @@
 const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json"
 
-let bar_initialized = false
-let bubble_initialized = false
-let demo_initialized = false
-
-
 function updateBar(data,subject_id){
-  //get otu_ids
   console.log(`updateBar ${subject_id}`);
   let id_dictionary = findDictionary(data["samples"],'id',subject_id);
 
   //values for bar graph
   let sampleValues = id_dictionary["sample_values"]
-  //sampleValuesReversed = sampleValues.reverse()
+  
   let top_10_sampleValues = sampleValues.slice(0,10)
   //Reversing to graph in descending order
   let reversed_top10Samples = top_10_sampleValues.reverse()
@@ -20,7 +14,7 @@ function updateBar(data,subject_id){
 
   //labels for bar graph
   let otu_ids_array = id_dictionary["otu_ids"]
-  //otu_ids_reversed = otu_ids_array.reverse()
+  
   let top_10_otuIDs = otu_ids_array.slice(0,10)
   //Reversing to graph in descending order
   let reversed_otuIDs = top_10_otuIDs.reverse()
@@ -32,6 +26,7 @@ function updateBar(data,subject_id){
 
   //hovertext for bar graph
   let otu_labels = id_dictionary["otu_labels"].slice(0,10)
+  //Reversing to align with x and y data
   let otu_labels_reversed = otu_labels.reverse()
 
   
@@ -48,12 +43,7 @@ function updateBar(data,subject_id){
     title: "Top 10 OTU IDs for Subject " + subject_id
   }
 
-  if(!bar_initialized){
-    Plotly.newPlot("bar",bar_data,layout);
-    bar_initialized = true
-  }
-  else {Plotly.restyle("bar", "values", bar_data); }
-  
+  Plotly.newPlot("bar",bar_data,layout);
 }
 
 function findDictionary(arr,key,value){
@@ -89,26 +79,19 @@ function updateBubble(data,subject_id){
     title:"Samples for Subject " + subject_id
   }
 
-  if(!bubble_initialized) {
-    Plotly.newPlot('bubble',bubble_data,layout)
-    let bubble_initialized = true
-  }
-
-  else {Plotly.restyle("bubble", "values", bubble_data); }
+  Plotly.newPlot('bubble',bubble_data,layout)
 }
 
 
 function updateDemo(data,subject_id){
   console.log(`updateDemo ${subject_id}`);
   console.log(data);
-  //let id_dictionary = findDictionary(data["samples"],'id',subject_id)
-  //let id_samples = findDictionary(data["samples"],'id',subject_id)
   let id_metadata = findDictionary(data["metadata"],'id',parseInt(subject_id))
-  console.log(id_metadata)
 
   let demoTable = d3.select("#sample-metadata");
   let keys = Object.keys(id_metadata)
 
+  d3.selectAll("h6").remove()  
   for(i = 0; i < keys.length; i++){
     let key = keys[i];
     let row = key + ": " + id_metadata[key];
@@ -139,10 +122,5 @@ function init() {
     optionChanged(subject_ids[0]);
   });
 }   
-
-// Plotly.newPlot("plot",traceData,layout)
-// function updatePlotly(newdata) {
-//   Plotly.restyle("bar", "values", [newdata]);
-// }
 
 init();
